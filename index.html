@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เครื่องมือสร้างแท็กและวิเคราะห์เทรนด์สำหรับโปรดิวเซอร์</title>
+    <!-- Favicon links -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #F9F6F2;
+            color: #3D3535;
+        }
+        .hero-gradient-text {
+            background: linear-gradient(90deg, #D68C45, #8C4848);
+            -webkit-background-clip: text;
+            background-clip: text; /* Added for compatibility */
+            -webkit-text-fill-color: transparent;
+        }
+        .section-title { color: #8C4848; }
+        .interactive-tab {
+            cursor: pointer;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+            border: 2px solid #EAE1D9;
+            font-weight: 500;
+        }
+        .interactive-tab.active {
+            background-color: #8C4848;
+            color: #F9F6F2;
+            border-color: #8C4848;
+        }
+        .interactive-tab:not(.active) {
+            background-color: #FFFFFF;
+            color: #8C4848;
+        }
+        .interactive-tab:not(.active):hover { background-color: #F0EBE5; }
+        .tag {
+            display: inline-block; padding: 0.25rem 0.75rem; margin: 0.25rem;
+            background-color: #EAE1D9; color: #3D3535; border-radius: 9999px;
+            font-size: 0.875rem;
+        }
+        .custom-select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238C4848' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.7rem center;
+            background-size: 1.2em;
+        }
+        #output-description {
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+
+        <header class="text-center mb-16 md:mb-24">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 tracking-tight">
+                Beat SEO <span class="hero-gradient-text">Toolkit</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+                เครื่องมือสร้างแท็กและวิเคราะห์เทรนด์สำหรับโปรดิวเซอร์ยุคใหม่ สร้างขึ้นจากข้อมูลจริงเพื่อเพิ่มการค้นพบและยอดขาย
+            </p>
+        </header>
+
+        <main class="space-y-16 md:space-y-24">
+
+            <!-- Interactive Tag & Title Generator -->
+            <section id="tag-generator" class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <h2 class="text-3xl font-bold text-center mb-2 section-title">เครื่องมือสร้างแท็กและชื่อวิดีโอ</h2>
+                <p class="text-center text-gray-600 max-w-2xl mx-auto mb-8">
+                    เลือกองค์ประกอบของบีทคุณ แล้วระบบจะสร้างชื่อวิดีโอและชุดแท็กที่ปรับให้เหมาะสมกับการค้นหาบน YouTube
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <div>
+                        <label for="genre-select" class="font-semibold text-gray-700 block mb-1">แนวเพลงหลัก</label>
+                        <select id="genre-select" class="custom-select w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                            <!-- Options populated by JS -->
+                        </select>
+                        <input type="text" id="custom-genre-input" placeholder="หรือเพิ่มแนวเพลงเอง..." class="mt-2 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                    </div>
+                    <div>
+                        <label for="artist-select" class="font-semibold text-gray-700 block mb-1">Type Beat ศิลปิน</label>
+                        <select id="artist-select" class="custom-select w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                             <!-- Options populated by JS -->
+                        </select>
+                        <input type="text" id="custom-artist-input" placeholder="หรือเพิ่มศิลปินเอง..." class="mt-2 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                    </div>
+                    <div>
+                        <label for="mood-select" class="font-semibold text-gray-700 block mb-1">อารมณ์ / บรรยากาศ</label>
+                        <select id="mood-select" class="custom-select w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                             <!-- Options populated by JS -->
+                        </select>
+                    </div>
+                     <div>
+                        <label for="beat-name" class="font-semibold text-gray-700 block mb-1">ชื่อบีทของคุณ</label>
+                        <input type="text" id="beat-name" placeholder="เช่น 'Night Drive'" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                    </div>
+                </div>
+
+                <div class="space-y-6 mb-8">
+                    <div>
+                        <h3 class="font-semibold text-lg mb-2">ชื่อวิดีโอที่แนะนำ:</h3>
+                        <div class="bg-gray-100 p-4 rounded-lg text-gray-800 font-mono" id="output-title">(เลือกองค์ประกอบเพื่อสร้างชื่อ)</div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                             <h3 class="font-semibold text-lg">ชุดแท็กที่แนะนำ:</h3>
+                             <button id="copy-tags-btn" class="text-sm bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">คัดลอกแท็ก</button>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded-lg" id="output-tags-container">
+                             <span class="text-gray-500">(เลือกองค์ประกอบเพื่อสร้างแท็ก)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- YouTube Description Generator -->
+                <div class="mt-10 pt-6 border-t border-gray-200">
+                    <h2 class="text-3xl font-bold text-center mb-2 section-title">เครื่องมือสร้างคำอธิบาย YouTube</h2>
+                    <p class="text-center text-gray-600 max-w-2xl mx-auto mb-8">
+                        สร้างคำอธิบายวิดีโอ YouTube ที่สมบูรณ์แบบตามสไตล์ที่คุณต้องการ พร้อมข้อมูลสำคัญสำหรับโปรดิวเซอร์
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label for="bpm-input" class="font-semibold text-gray-700 block mb-1">BPM</label>
+                            <input type="number" id="bpm-input" placeholder="เช่น 104" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                        </div>
+                        <div>
+                            <label for="key-note-select" class="font-semibold text-gray-700 block mb-1">คีย์ (ตัวโน้ต)</label>
+                            <select id="key-note-select" class="custom-select w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                                <option value="">เลือกตัวโน้ต</option>
+                                <option value="C">C</option>
+                                <option value="C#">C#</option>
+                                <option value="D">D</option>
+                                <option value="D#">D#</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="F#">F#</option>
+                                <option value="G">G</option>
+                                <option value="G#">G#</option>
+                                <option value="A">A</option>
+                                <option value="A#">A#</option>
+                                <option value="B">B</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="key-scale-select" class="font-semibold text-gray-700 block mb-1">คีย์ (ประเภท)</label>
+                            <select id="key-scale-select" class="custom-select w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                                <option value="">เลือกประเภท</option>
+                                <option value="major">major</option>
+                                <option value="minor">minor</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="purchase-link-input" class="font-semibold text-gray-700 block mb-1">ลิงก์ซื้อ/ดาวน์โหลด (Beatstars)</label>
+                            <input type="url" id="purchase-link-input" value="https://bsta.rs/46fcde7fc" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                        </div>
+                        <div>
+                            <label for="store-link-input" class="font-semibold text-gray-700 block mb-1">ลิงก์ร้านค้า (Beatstars)</label>
+                            <input type="url" id="store-link-input" value="https://www.beatstars.com/intaybeatst" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                        </div>
+                        <div>
+                            <label for="bento-link-input" class="font-semibold text-gray-700 block mb-1">ลิงก์ Bento.me (Follow)</label>
+                            <input type="url" id="bento-link-input" value="https://bento.me/intaybeats" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                        </div>
+                        <div>
+                            <label for="licensing-link-input" class="font-semibold text-gray-700 block mb-1">ลิงก์ข้อมูล License</label>
+                            <input type="url" id="licensing-link-input" value="https://intay.my.canva.site" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:focus:border-amber-500">
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="description-keywords-input" class="font-semibold text-gray-700 block mb-1">คีย์เวิร์ด/รายละเอียดเพิ่มเติม (สำหรับเนื้อหาคำอธิบาย)</label>
+                        <input type="text" id="description-keywords-input" placeholder="เช่น 'บีทสำหรับแร็ปเปอร์', 'คุณภาพสูง', 'ฟรีดาวน์โหลด'" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                    </div>
+                    <div class="flex justify-center mb-6">
+                        <button id="generate-description-btn" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-lg">
+                            สร้างคำอธิบาย YouTube
+                        </button>
+                    </div>
+
+                    <div id="loading-spinner" class="hidden text-center mt-4">
+                        <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-amber-600 motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
+                            <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+                        </div>
+                        <p class="text-gray-500 mt-2">กำลังคิดคำอธิบาย...</p>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-semibold text-lg">คำอธิบายที่แนะนำ:</h3>
+                            <button id="copy-description-btn" class="text-sm bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">คัดลอกคำอธิบาย</button>
+                        </div>
+                        <textarea id="output-description" readonly class="w-full h-80 p-4 border border-gray-300 rounded-lg bg-gray-100 text-gray-800 focus:outline-none resize-y" placeholder="คำอธิบายจะปรากฏที่นี่..."></textarea>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Removed Market Pulse Dashboard, Emerging Trends, and The Producer's Playbook sections -->
+
+        </main>
+
+        <footer class="text-center mt-16 md:mt-24 pt-8 border-t border-gray-200">
+            <p class="text-gray-500 text-sm">เครื่องมือนี้สร้างขึ้นจากการสังเคราะห์และวิเคราะห์ข้อมูลจากรายงานภูมิทัศน์บีทบน YouTube และ BeatStars</p>
+        </footer>
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const toolkitData = {
+            genres: [
+                { id: 'trap', name: 'Trap' },
+                { id: 'hiphop', name: 'Hip Hop' },
+                { id: 'rnb', name: 'R&B' },
+                { id: 'pop', name: 'Pop' },
+                { id: 'lofi', name: 'Lo-Fi' },
+                { id: 'drill', name: 'Drill' },
+                { id: 'boom_bap', name: 'Boom Bap' },
+                { id: 'afrobeat', name: 'Afrobeat' },
+                { id: 'citypop', name: 'CityPop' },
+            ],
+            artists: [
+                { id: 'drake', name: 'Drake' },
+                { id: 'travis_scott', name: 'Travis Scott' },
+                { id: 'juice_wrld', name: 'Juice WRLD' },
+                { id: 'kanye_west', name: 'Kanye West' },
+                { id: '21_savage', name: '21 Savage' },
+                { id: 'lil_baby', name: 'Lil Baby' },
+                { id: 'pop_smoke', name: 'Pop Smoke' },
+                { id: 'the_weeknd', name: 'The Weeknd' },
+                { id: 'partynextdoor', name: 'PARTYNEXTDOOR' },
+                { id: 'jid', name: 'JID' },
+                { id: 'j_cole', name: 'J. Cole' },
+                { id: 'bryson_tiller', name: 'Bryson Tiller' },
+                { id: 'gunna', name: 'Gunna' },
+            ],
+            moods: [
+                { id: 'dark', name: 'Dark / มืดหม่น' },
+                { id: 'sad', name: 'Sad / เศร้า' },
+                { id: 'chill', name: 'Chill / ผ่อนคลาย' },
+                { id: 'energetic', name: 'Energetic / มีพลัง' },
+                { id: 'emotional', name: 'Emotional / อารมณ์' },
+                { id: 'smooth', name: 'Smooth / ราบรื่น' },
+                { id: 'hard', name: 'Hard / หนักแน่น' },
+                { id: 'dreamy', name: 'Dreamy / ชวนฝัน' },
+            ]
+        };
+
+        const genreSelect = document.getElementById('genre-select');
+        const artistSelect = document.getElementById('artist-select');
+        const moodSelect = document.getElementById('mood-select');
+        const customArtistInput = document.getElementById('custom-artist-input');
+        const customGenreInput = document.getElementById('custom-genre-input');
+        const beatNameInput = document.getElementById('beat-name');
+
+        const bpmInput = document.getElementById('bpm-input');
+        const keyNoteSelect = document.getElementById('key-note-select');
+        const keyScaleSelect = document.getElementById('key-scale-select');
+        const purchaseLinkInput = document.getElementById('purchase-link-input');
+        const storeLinkInput = document.getElementById('store-link-input');
+        const bentoLinkInput = document.getElementById('bento-link-input');
+        const licensingLinkInput = document.getElementById('licensing-link-input');
+
+        const descriptionKeywordsInput = document.getElementById('description-keywords-input');
+        const generateDescriptionBtn = document.getElementById('generate-description-btn');
+        const outputDescription = document.getElementById('output-description');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const copyDescriptionBtn = document.getElementById('copy-description-btn');
+        
+        const defaultArtistOption = new Option('เลือกศิลปิน', '');
+        artistSelect.add(defaultArtistOption);
+
+        const defaultGenreOption = new Option('เลือกแนวเพลง', '');
+        genreSelect.add(defaultGenreOption);
+
+        toolkitData.genres.forEach(item => {
+            const option = new Option(item.name, item.id);
+            genreSelect.add(option);
+        });
+        toolkitData.artists.forEach(item => {
+            const option = new Option(item.name, item.id);
+            artistSelect.add(option);
+        });
+        toolkitData.moods.forEach(item => {
+            const option = new Option(item.name, item.id);
+            moodSelect.add(option);
+        });
+        
+        const inputs = [genreSelect, artistSelect, moodSelect, beatNameInput, customArtistInput, customGenreInput, bpmInput, keyNoteSelect, keyScaleSelect, purchaseLinkInput, storeLinkInput, bentoLinkInput, licensingLinkInput];
+        const outputTitle = document.getElementById('output-title');
+        const outputTagsContainer = document.getElementById('output-tags-container');
+
+        const PRODUCER_NAME = 'Intay Beats';
+        const PRODUCER_TAG = `Prod. by ${PRODUCER_NAME}`;
+
+        function generateTags() {
+            let selectedGenreName;
+            let rawGenreName = customGenreInput.value.trim();
+            if (rawGenreName !== '') {
+                selectedGenreName = rawGenreName;
+                genreSelect.value = '';
+            } else {
+                const genre = toolkitData.genres.find(g => g.id === genreSelect.value);
+                selectedGenreName = genre ? genre.name : '';
+            }
+
+            let selectedArtistName;
+            let rawArtistName = customArtistInput.value.trim();
+            if (rawArtistName !== '') {
+                selectedArtistName = rawArtistName;
+                artistSelect.value = '';
+            } else {
+                const artist = toolkitData.artists.find(a => a.id === artistSelect.value);
+                selectedArtistName = artist ? artist.name : '';
+            }
+
+            const mood = toolkitData.moods.find(m => m.id === moodSelect.value);
+            const beatName = beatNameInput.value.trim();
+            const selectedKeyNote = keyNoteSelect.value;
+            const selectedKeyScale = keyScaleSelect.value;
+            const finalKey = (selectedKeyNote && selectedKeyScale) ? `${selectedKeyNote} ${selectedKeyScale}` : '';
+
+            let titleParts = ['(FREE)'];
+            if (selectedArtistName) {
+                titleParts.push(`${selectedArtistName} Type Beat`);
+            }
+            if (beatName) {
+                titleParts.push(`- "${beatName}"`);
+            } else {
+                 titleParts.push(`- "Untitled"`);
+            }
+            if (mood && selectedGenreName) {
+                titleParts.push(`| ${mood.name.split('/')[0].trim()} ${selectedGenreName} Instrumental`);
+            } else if (mood) {
+                titleParts.push(`| ${mood.name.split('/')[0].trim()} Instrumental`);
+            } else if (selectedGenreName) {
+                titleParts.push(`| ${selectedGenreName} Instrumental`);
+            }
+            outputTitle.textContent = titleParts.join(' ');
+            
+            let tags = new Set();
+            if (selectedArtistName) {
+                tags.add(`${selectedArtistName.toLowerCase()} type beat`);
+                tags.add(`free ${selectedArtistName.toLowerCase()} type beat`);
+            }
+            if (selectedGenreName) {
+                tags.add(`${selectedGenreName.toLowerCase()} beat`);
+                tags.add(`${selectedGenreName.toLowerCase()}`);
+            }
+            if (mood) {
+                tags.add(`${mood.name.split('/')[0].trim().toLowerCase()} beat`);
+            }
+            tags.add(`instrumental`);
+            tags.add(`beat`);
+            tags.add(PRODUCER_TAG.toLowerCase());
+            if(beatName) tags.add(beatName.toLowerCase());
+            if (rawGenreName) tags.add(rawGenreName.toLowerCase());
+            if (rawArtistName) tags.add(rawArtistName.toLowerCase());
+            if (finalKey) tags.add(finalKey.toLowerCase().replace(' ', ''));
+
+            outputTagsContainer.innerHTML = '';
+            if (tags.size === 0 || (tags.size === 1 && tags.has(PRODUCER_TAG.toLowerCase()))) {
+                 const span = document.createElement('span');
+                 span.className = 'text-gray-500';
+                 span.textContent = '(เลือกองค์ประกอบเพื่อสร้างแท็ก)';
+                 outputTagsContainer.appendChild(span);
+            } else {
+                tags.forEach(tagText => {
+                    const tagEl = document.createElement('span');
+                    tagEl.className = 'tag';
+                    tagEl.textContent = tagText;
+                    outputTagsContainer.appendChild(tagEl);
+                });
+            }
+
+            descriptionKeywordsInput.value = Array.from(tags).join(', ');
+        }
+        
+        inputs.forEach(input => input.addEventListener('change', generateTags));
+        beatNameInput.addEventListener('keyup', generateTags);
+        customArtistInput.addEventListener('keyup', generateTags);
+        customGenreInput.addEventListener('keyup', generateTags);
+        
+        keyNoteSelect.addEventListener('change', generateTags);
+        keyScaleSelect.addEventListener('change', generateTags);
+
+        customArtistInput.addEventListener('focus', () => { artistSelect.value = ''; });
+        customGenreInput.addEventListener('focus', () => { genreSelect.value = ''; });
+
+
+        document.getElementById('copy-tags-btn').addEventListener('click', () => {
+            const tags = Array.from(outputTagsContainer.querySelectorAll('.tag')).map(t => t.textContent).join(', ');
+            if (tags && tags !== '(เลือกองค์ประกอบเพื่อสร้างแท็ก)') {
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = tags;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                try {
+                    document.execCommand('copy');
+                    alert('คัดลอกแท็กทั้งหมดแล้ว!');
+                } catch (err) {
+                    console.error('Failed to copy tags: ', err);
+                    alert('ไม่สามารถคัดลอกได้ อาจเป็นเพราะข้อจำกัดของเบราว์เซอร์ กรุณาคัดลอกด้วยตนเอง');
+                } finally {
+                    document.body.removeChild(tempTextArea);
+                }
+            } else {
+                alert('ไม่มีแท็กให้คัดลอก');
+            }
+        });
+
+        // Function to generate YouTube Description
+        async function generateYouTubeDescription() {
+            loadingSpinner.classList.remove('hidden');
+            outputDescription.value = '';
+            generateDescriptionBtn.disabled = true;
+
+            let selectedGenreName = genreSelect.value ? toolkitData.genres.find(g => g.id === genreSelect.value).name : customGenreInput.value.trim();
+            let selectedArtistName = artistSelect.value ? toolkitData.artists.find(a => a.id === artistSelect.value).name : customArtistInput.value.trim();
+            let selectedMoodName = moodSelect.value ? toolkitData.moods.find(m => m.id === moodSelect.value).name.split('/')[0].trim() : '';
+            const beatName = beatNameInput.value.trim();
+            const bpm = bpmInput.value.trim();
+            const selectedKeyNote = keyNoteSelect.value;
+            const selectedKeyScale = keyScaleSelect.value;
+            const finalKey = (selectedKeyNote && selectedKeyScale) ? `${selectedKeyNote} ${selectedKeyScale}` : '';
+
+            const purchaseLink = purchaseLinkInput.value.trim();
+            const storeLink = storeLinkInput.value.trim();
+            const bentoLink = bentoLinkInput.value.trim();
+            const licensingLink = licensingLinkInput.value.trim();
+            const additionalKeywords = descriptionKeywordsInput.value.trim();
+            
+            let descriptionContent = '';
+            const finalBeatName = beatName || 'Untitled Beat';
+            
+            let typeBeatSection = '';
+            if (selectedGenreName && selectedArtistName) {
+                typeBeatSection = `${selectedGenreName} x ${selectedArtistName} Type Beat`;
+            } else if (selectedGenreName) {
+                typeBeatSection = `${selectedGenreName} Type Beat`;
+            } else if (selectedArtistName) {
+                typeBeatSection = `${selectedArtistName} Type Beat`;
+            } else {
+                typeBeatSection = 'Instrumental';
+            }
+
+            descriptionContent += `${finalBeatName} (${typeBeatSection}) | ${bpm || 'ไม่ระบุ'} BPM / ${finalKey || 'ไม่ระบุ'} \n`;
+            descriptionContent += `🎧 Purchase/Download this track: ${purchaseLink || '[ลิงก์ซื้อ/ดาวน์โหลด]'} \n`;
+            descriptionContent += `🌐 Store: ${storeLink || '[ลิงก์ร้านค้า]'} \n`;
+            descriptionContent += `✎ Must credit "${PRODUCER_TAG}" \n\n`;
+
+            descriptionContent += `Follow ${PRODUCER_NAME} \n`;
+            descriptionContent += `✦ ${bentoLink || '[ลิงก์ Bento.me]'} \n\n`;
+
+            descriptionContent += `Term of Use \n`;
+            descriptionContent += `✦ Licensing Info: ${licensingLink || '[ลิงก์ข้อมูล License]'} \n`;
+            let freeDownloadText = "✦ Free downloads are available for demo and non-profit purposes only, Please purchase a license to use this beat instrumental commercially.";
+            if (additionalKeywords.toLowerCase().includes('free') && !additionalKeywords.toLowerCase().includes('demo')) {
+                freeDownloadText += " (If you're using this beat for a free project, credit is still required.)";
+            }
+            descriptionContent += `${freeDownloadText} \n\n`;
+
+
+            let finalHashtags = new Set();
+            const generatedTagsArray = Array.from(outputTagsContainer.querySelectorAll('.tag')).map(t => t.textContent.toLowerCase().replace(/[^a-z0-9ก-ฮ ]/g, '').replace(/\s+/g, ''));
+            
+            generatedTagsArray.forEach(tag => {
+                if (tag && tag !== PRODUCER_TAG.toLowerCase().replace(/[^a-z0-9ก-ฮ ]/g, '').replace(/\s+/g, '')) {
+                    finalHashtags.add(`#${tag.replace(/\s/g, '')}`);
+                }
+            });
+
+            if (additionalKeywords) {
+                additionalKeywords.split(/[, ]+/).forEach(keyword => {
+                    const cleanKeyword = keyword.trim().toLowerCase().replace(/[^a-z0-9ก-ฮ ]/g, '').replace(/\s+/g, '');
+                    if (cleanKeyword && !finalHashtags.has(`#${cleanKeyword}`)) {
+                        finalHashtags.add(`#${cleanKeyword}`);
+                    }
+                });
+            }
+            finalHashtags.add(`#${PRODUCER_NAME.replace(/\s/g, '')}`);
+
+            descriptionContent += Array.from(finalHashtags).join(' ') + '\n\n';
+
+            descriptionContent += `♪ 00:00 Intro \n`;
+            descriptionContent += `♪ 00:27 Vers \n`;
+            descriptionContent += `♪ 00:46 Pre \n`;
+            descriptionContent += `♪ 01:04 Chorus \n`;
+            descriptionContent += `♪ 01:23 Vers \n`;
+            descriptionContent += `♪ 01:41 Pre \n`;
+            descriptionContent += `♪ 02:00 Chorus \n`;
+            descriptionContent += `♪ 02:18 Solo \n`;
+            descriptionContent += `♪ 02:37 Chorus \n`;
+            descriptionContent += `♪ 03:14 Out \n\n`;
+
+            descriptionContent += `℗ ${PRODUCER_NAME} \n`;
+            descriptionContent += `© Produced by ${PRODUCER_NAME} \n`;
+            descriptionContent += `® Copyrighted by ${PRODUCER_NAME} \n`;
+
+            outputDescription.value = descriptionContent;
+            
+            loadingSpinner.classList.add('hidden');
+            generateDescriptionBtn.disabled = false;
+        }
+
+        generateDescriptionBtn.addEventListener('click', generateYouTubeDescription);
+
+        copyDescriptionBtn.addEventListener('click', () => {
+            if (outputDescription.value) {
+                outputDescription.select();
+                try {
+                    document.execCommand('copy');
+                    alert('คัดลอกคำอธิบายแล้ว!');
+                } catch (err) {
+                    console.error('Failed to copy description: ', err);
+                    alert('ไม่สามารถคัดลอกได้ อาจเป็นเพราะข้อจำกัดของเบราว์เซอร์ กรุณาคัดลอกด้วยตนเอง');
+                }
+            } else {
+                alert('ไม่มีคำอธิบายให้คัดลอก');
+            }
+        });
+        
+        generateTags(); // Initial call to populate tags and description keywords
+
+        // Removed Chart.js initialization code as charts are no longer in this file
+    });
+</script>
+</body>
+</html>
